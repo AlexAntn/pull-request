@@ -26,18 +26,8 @@ DESTINATION_BRANCH="${INPUT_DESTINATION_BRANCH:-"master"}"
 # Github actions no longer auto set the username and GITHUB_TOKEN
 git remote set-url origin "https://$GITHUB_ACTOR:$GITHUB_TOKEN@${GITHUB_SERVER_URL#https://}/$GITHUB_REPOSITORY.git"
 
-git remote show origin
-
 # configure hub to have the same credentials
 #sed 's/.*oauth_token: .*/  oauth_token: $GITHUB_TOKEN/' $HOME/.config/hub
-mkdir ~/.config
-touch ~/.config/hub
-echo "github.com:" > ~/.config/hub
-echo "- user: $GITHUB_ACTOR" >> ~/.config/hub
-echo "  oauth_token: $GITHUB_TOKEN" >> ~/.config/hub
-echo "  protocol: https" >> ~/.config/hub
-
-cat ~/.config/hub
 
 # Pull all branches references down locally so subsequent commands can see them
 git fetch origin '+refs/heads/*:refs/heads/*' --update-head-ok
@@ -88,6 +78,8 @@ fi
 if [[ "$INPUT_PR_DRAFT" ==  "true" ]]; then
   PR_ARG="$PR_ARG -d"
 fi
+
+git remote show origin
 
 COMMAND="hub pull-request \
   -b $DESTINATION_BRANCH \
