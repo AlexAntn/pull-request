@@ -10,7 +10,6 @@ fi
 
 # Workaround for `hub` auth error https://github.com/github/hub/issues/2149#issuecomment-513214342
 export GITHUB_USER="$GITHUB_ACTOR"
-export GITHUB_PASSWORD="$GITHUB_TOKEN"
 
 if [[ ! -z "$INPUT_SOURCE_BRANCH" ]]; then
   SOURCE_BRANCH="$INPUT_SOURCE_BRANCH"
@@ -24,10 +23,9 @@ fi
 DESTINATION_BRANCH="${INPUT_DESTINATION_BRANCH:-"master"}"
 
 # Github actions no longer auto set the username and GITHUB_TOKEN
+git remote remove origin
+git remote add origin "https://$GITHUB_SERVER_URL/$GITHUB_REPOSITORY.git"
 git remote set-url origin "https://$GITHUB_ACTOR:$GITHUB_TOKEN@${GITHUB_SERVER_URL#https://}/$GITHUB_REPOSITORY.git"
-
-# configure hub to have the same credentials
-#sed 's/.*oauth_token: .*/  oauth_token: $GITHUB_TOKEN/' $HOME/.config/hub
 
 # Pull all branches references down locally so subsequent commands can see them
 git fetch origin '+refs/heads/*:refs/heads/*' --update-head-ok
