@@ -30,10 +30,11 @@ git remote show origin
 
 # configure hub to have the same credentials
 #sed 's/.*oauth_token: .*/  oauth_token: $GITHUB_TOKEN/' $HOME/.config/hub
-"github.com:" > ~/.config/hub
-"- user: $GITHUB_ACTOR" >> ~/.config/hub
-"  oauth_token: $GITHUB_TOKEN" >> ~/.config/hub
-"  protocol: https" >> ~/.config/hub
+touch ~/.config/hub
+echo "github.com:" > ~/.config/hub
+echo "- user: $GITHUB_ACTOR" >> ~/.config/hub
+echo "  oauth_token: $GITHUB_TOKEN" >> ~/.config/hub
+echo "  protocol: https" >> ~/.config/hub
 
 cat ~/.config/hub
 
