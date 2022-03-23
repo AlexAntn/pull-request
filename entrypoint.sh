@@ -8,6 +8,10 @@ if [[ -z "$GITHUB_TOKEN" ]]; then
   exit 1
 fi
 
+# Workaround for `hub` auth error https://github.com/github/hub/issues/2149#issuecomment-513214342
+export GITHUB_USER="$GITHUB_ACTOR"
+export GITHUB_PASSWORD="$GITHUB_TOKEN"
+
 if [[ ! -z "$INPUT_SOURCE_BRANCH" ]]; then
   SOURCE_BRANCH="$INPUT_SOURCE_BRANCH"
 elif [[ ! -z "$GITHUB_REF" ]]; then
@@ -42,10 +46,6 @@ if [[ "$LINES_CHANGED" = "0" ]] && [[ ! "$INPUT_PR_ALLOW_EMPTY" ==  "true" ]]; t
   echo "No file changes detected between source and destination branches."
   exit 0
 fi
-
-
-# Workaround for `hub` auth error https://github.com/github/hub/issues/2149#issuecomment-513214342
-export GITHUB_USER="$GITHUB_ACTOR"
 
 PR_ARG="$INPUT_PR_TITLE"
 if [[ ! -z "$PR_ARG" ]]; then
